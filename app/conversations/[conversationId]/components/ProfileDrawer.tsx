@@ -1,12 +1,14 @@
 'use client';
 
-import Avatar from "@/app/components/Avatar";
-import useOtherUser from "@/app/hooks/useOtherUser";
 import { Transition, Dialog } from "@headlessui/react";
 import { Conversation, User } from "@prisma/client";
 import { format } from "date-fns";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { IoClose, IoTrash } from 'react-icons/io5';
+
+import Avatar from "@/app/components/Avatar";
+import useOtherUser from "@/app/hooks/useOtherUser";
+import ConfirmModal from "./ConfirmModal";
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -18,6 +20,7 @@ interface ProfileDrawerProps {
 
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     const otherUser = useOtherUser(data);
+    const [ confirmOpen , setConfirmOpen ] = useState(false);
 
     const joinedDate = useMemo(() => {
         return format(new Date(otherUser.createdAt), 'PP');
@@ -36,10 +39,16 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
     }, [data]);
 
   return (
-    <Transition.Root 
-        show={isOpen} 
-        as={Fragment}
-    >
+    <>
+        <ConfirmModal 
+            isOpen={confirmOpen}
+            onClose={() => setConfirmOpen(false)} 
+        />
+
+        <Transition.Root 
+            show={isOpen} 
+            as={Fragment}
+        >
         <Dialog 
             as="div" 
             className="relative z-50" 
@@ -56,25 +65,38 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
             >
                 <div 
                     className="
-                    fixed 
-                    inset-0 
-                    bg-black 
-                    bg-opacity-40" 
+                        fixed 
+                        inset-0 
+                        bg-black 
+                        bg-opacity-40
+                    " 
                 />
             </Transition.Child>
 
             <div
-            className="fixed inset-0 overflow-hidden">
-                <div className="absolute inset-0 overflow-hidden">
-                    <div 
+                className="
+                    fixed 
+                    inset-0 
+                    overflow-hidden
+                "
+            >
+                <div 
                     className="
-                        pointer-events-none 
-                        fixed 
-                        inset-y-0 
-                        right-0 
-                        flex 
-                        max-w-full 
-                        pl-10"
+                        absolute 
+                        inset-0 
+                        overflow-hidden
+                    "
+                >
+                    <div 
+                        className="
+                            pointer-events-none 
+                            fixed 
+                            inset-y-0 
+                            right-0 
+                            flex 
+                            max-w-full 
+                            pl-10
+                        "
                     >
                         <Transition.Child 
                             as={Fragment} 
@@ -84,51 +106,57 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                             leaveTo="translate-x-full"
                         >
                             <Dialog.Panel
-                            className="
-                                pointer-events-auto 
-                                w-screen 
-                                max-w-md"
+                                className="
+                                    pointer-events-auto 
+                                    w-screen 
+                                    max-w-md
+                                "
                             >
                                 <div
-                                className="
-                                    flex
-                                    h-full
-                                    flex-col
-                                    overflow-y-scroll
-                                    bg-white
-                                    py-6
-                                    shadow-xl"
+                                    className="
+                                        flex
+                                        h-full
+                                        flex-col
+                                        overflow-y-scroll
+                                        bg-white
+                                        py-6
+                                        shadow-xl
+                                    "
                                 >
                                     <div 
-                                    className="
-                                        px-4 
-                                        sm:px-6
-                                    ">
-                                        <div 
                                         className="
-                                            flex 
-                                            items-start 
-                                            justify-end
-                                        ">
+                                            px-4 
+                                            sm:px-6
+                                        "
+                                    >
+                                        <div 
+                                            className="
+                                                flex 
+                                                items-start 
+                                                justify-end
+                                            "
+                                        >
                                             <div 
                                             className="
-                                                ml-3 
-                                                flex 
-                                                h-7 
-                                                items-center
-                                            ">
+                                                    ml-3 
+                                                    flex 
+                                                    h-7 
+                                                    items-center
+                                                "
+                                            >
                                                 <button
-                                                onClick={onClose}
-                                                type="button"
-                                                className="
-                                                rounded-md 
-                                                bg-white 
-                                                hover:text-gray-500 
-                                                focus:outline-none
-                                                focus:ring-2
-                                                focus:ring-gray-500
-                                                focus:ring-offset-2
-                                                ">                                 
+                                                    onClick={onClose}
+                                                    type="button"
+                                                    className="
+                                                        rounded-md 
+                                                        bg-white 
+                                                        hover:text-gray-500 
+                                                        focus:outline-none
+                                                        focus:ring-2
+                                                        focus:ring-gray-500
+                                                        focus:ring-offset-2
+                                                    "
+                                                >                                 
                                                     <span className="sr-only">
                                                     Close panel
                                                     </span>
@@ -137,8 +165,22 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                                        <div className="flex flex-col items-center">
+                                    <div 
+                                    className="
+                                            relative 
+                                            mt-6 
+                                            flex-1 
+                                            px-4 
+                                            sm:px-6
+                                        "
+                                    >
+                                        <div 
+                                            className="
+                                                flex 
+                                                flex-col 
+                                                items-center
+                                            "
+                                        >
                                             <div className="mb-2">
                                                 <Avatar user={otherUser} />
                                             </div>
@@ -150,7 +192,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                             </div>
                                             <div className="flex gap-10 my-8">
                                                 <div
-                                                    onClick={() => {}}
+                                                    onClick={() => setConfirmOpen(true)}
                                                     className="
                                                         flex
                                                         flex-col
@@ -161,22 +203,25 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                                     "
                                                 >
                                                     <div 
-                                                    className="
-                                                        w-10 
-                                                        h-10 
-                                                        bg-neutral-100 
-                                                        rounded-full 
-                                                        flex 
-                                                        items-center 
-                                                        justify-center
-                                                    ">
+                                                        className="
+                                                            w-10 
+                                                            h-10 
+                                                            bg-neutral-100 
+                                                            rounded-full 
+                                                            flex 
+                                                            items-center 
+                                                            justify-center
+                                                        "
+                                                    >
                                                         <IoTrash size={20} />
                                                     </div>
-                                                    <div className="
-                                                        text-sm
-                                                        font-light
-                                                        text-neutral-600
-                                                    ">
+                                                    <div 
+                                                        className="
+                                                            text-sm
+                                                            font-light
+                                                            text-neutral-600
+                                                        "
+                                                    >
                                                         Delete
                                                     </div>
                                                 </div>
@@ -235,7 +280,8 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                 </div>
             </div>
         </Dialog>
-    </Transition.Root>
+        </Transition.Root>
+    </>
   )
 };
 
