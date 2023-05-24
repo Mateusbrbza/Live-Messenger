@@ -1,16 +1,11 @@
-import { Inter } from 'next/font/google';
-
-import ToasterContext from './context/ToasterContext';
-import AuthContext from './context/AuthContext';
-
-import './globals.css';
-import ActiveStatus from './components/ActiveStatus';
-
-const inter = Inter({ subsets: ['latin'] })
+import './globals.css'
+import AuthContext from './context/AuthContext'
+import ActiveStatus from './components/ActiveStatus'
+import ToasterContext from './context/ToasterContext'
 
 export const metadata = {
   title: 'Messenger',
-  description: 'Messenger Demo',
+  description: 'Messenger Clone',
 }
 
 export default function RootLayout({
@@ -20,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AuthContext>
           <ToasterContext />
           <ActiveStatus />
