@@ -51,6 +51,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
       }))
     };
   
+
     pusherClient.bind('messages:new', messageHandler)
     pusherClient.bind('message:update', updateMessageHandler);
 

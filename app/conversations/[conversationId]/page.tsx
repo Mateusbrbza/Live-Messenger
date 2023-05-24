@@ -7,11 +7,11 @@ import Form from "./components/Form";
 import EmptyState from "@/app/components/EmptyState";
 
 interface IParams {
-    conversationId: string;
-};
+  conversationId: string;
+}
 
-const ConversationId = async ({ params }: { params: IParams }) => {
-    const conversation = await getConversationById(params.conversationId);
+const ChatId = async ({ params }: { params: IParams }) => {
+  const conversation = await getConversationById(params.conversationId);
   const messages = await getMessages(params.conversationId);
 
   if (!conversation) {
@@ -35,4 +35,4 @@ const ConversationId = async ({ params }: { params: IParams }) => {
   );
 }
 
-export default ConversationId;
+export default ChatId;
