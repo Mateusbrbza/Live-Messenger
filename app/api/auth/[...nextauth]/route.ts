@@ -52,7 +52,7 @@ export const authOptions: AuthOptions = {
       }
     })
   ],
-  debug: process.env.NODE_END === 'development',
+  debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: "jwt",
   },
